@@ -10,9 +10,9 @@ LD86	=ld -0
 
 AS	=as
 LD	=ld
-LDFLAGS	=-s -x -M
+LDFLAGS	=-Wl,-s,-x,-M,-m,i386pe -lgcc
 CC	=gcc
-CFLAGS = -std=gnu89 -m32 -fno-builtin -Wall -O -fstrength-reduce -fomit-frame-pointer
+CFLAGS = -std=gnu89 -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer
 CPP	=gcc -E -nostdinc -Iinclude
 
 ARCHIVES=kernel/kernel.o mm/mm.o fs/fs.o
@@ -20,12 +20,12 @@ LIBS	=lib/lib.a
 
 .c.s:
 	$(CC) $(CFLAGS) \
-	-nostdinc -Iinclude -S -o $*.s $<
+	-ffreestanding -lgcc -nostdinc -Iinclude -S -o $*.s $<
 .s.o:
 	$(AS) --32 -o $*.o $<
 .c.o:
 	$(CC) $(CFLAGS) \
-	-nostdinc -Iinclude -c -o $*.o $<
+	-ffreestanding -lgcc -nostdinc -Iinclude -c -o $*.o $<
 
 all:	Image
 
@@ -42,7 +42,7 @@ boot/head.o: boot/head.s
 
 tools/system:	boot/head.o init/main.o \
 		$(ARCHIVES) $(LIBS)
-	$(LD) $(LDFLAGS) boot/head.o init/main.o \
+	$(CC) $(LDFLAGS) boot/head.o init/main.o \
 	$(ARCHIVES) \
 	$(LIBS) \
 	-o tools/system > System.map

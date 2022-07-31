@@ -6,8 +6,8 @@
  * the page directory.
  */
 .text
-.globl idt,gdt,pg_dir
-pg_dir:
+.globl _idt,_gdt,_pg_dir
+_pg_dir:
 startup_32:
 	movl $0x10,%eax
 	mov %ax,%ds
@@ -53,7 +53,7 @@ setup_idt:
 	movw %dx,%ax		/* selector = 0x0008 = cs */
 	movw $0x8E00,%dx	/* interrupt gate - dpl=0, present */
 
-	lea idt,%edi
+	lea _idt,%edi
 	mov $256,%ecx
 rp_sidt:
 	movl %eax,(%edi)
@@ -139,8 +139,8 @@ setup_paging:
 	xorl %eax,%eax
 	xorl %edi,%edi			/* pg_dir is at 0x000 */
 	cld;rep;stosl
-	movl $pg0+7,pg_dir		/* set present bit/user r/w */
-	movl $pg1+7,pg_dir+4		/*  --------- " " --------- */
+	movl $pg0+7,_pg_dir		/* set present bit/user r/w */
+	movl $pg1+7,_pg_dir+4		/*  --------- " " --------- */
 	movl $pg1+4092,%edi
 	movl $0x7ff007,%eax		/*  8Mb - 4096 + 7 (r/w user,p) */
 	std
@@ -158,17 +158,17 @@ setup_paging:
 .word 0
 idt_descr:
 	.word 256*8-1		# idt contains 256 entries
-	.long idt
+	.long _idt
 .align 4
 .word 0
 gdt_descr:
 	.word 256*8-1		# so does gdt (not that that's any
-	.long gdt		# magic number, but it works for me :^)
+	.long _gdt		# magic number, but it works for me :^)
 
 	.align 8
-idt:	.fill 256,8,0		# idt is uninitialized
+_idt:	.fill 256,8,0		# idt is uninitialized
 
-gdt:	.quad 0x0000000000000000	/* NULL descriptor */
+_gdt:	.quad 0x0000000000000000	/* NULL descriptor */
 	.quad 0x00c09a00000007ff	/* 8Mb */
 	.quad 0x00c09200000007ff	/* 8Mb */
 	.quad 0x0000000000000000	/* TEMPORARY - don't use */
