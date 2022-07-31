@@ -76,6 +76,8 @@ static void time_init(void)
 	startup_time = kernel_mktime(&time);
 }
 
+void __main() {}
+
 void main(void)		/* This really IS void, no error here. */
 {			/* The startup routine assumes (well, ...) this */
 /*

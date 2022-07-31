@@ -33,11 +33,11 @@ static unsigned long scr_end=SCREEN_START+LINES*COLUMNS*2;
 static unsigned long pos;
 static unsigned long x,y;
 static unsigned long top=0,bottom=LINES;
-static unsigned long lines=LINES,columns=COLUMNS;
+unsigned long lines=LINES,columns=COLUMNS;
 static unsigned long state=0;
 static unsigned long npar,par[NPAR];
 static unsigned long ques=0;
-static unsigned char attr=0x07;
+unsigned char attr=0x07;
 
 /*
  * this is what the terminal answers to a ESC-Z or csi0c

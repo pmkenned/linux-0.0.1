@@ -1,5 +1,5 @@
 CC	=gcc
-CFLAGS = -std=gnu89 -m32 -ffreestanding -lgcc -O -Wall -fstrength-reduce -fomit-frame-pointer \
+CFLAGS = -std=gnu89 -m32 -ffreestanding -O -Wall -fstrength-reduce -fomit-frame-pointer \
 	-finline-functions -nostdinc -I../include
 AS	=as
 AR	=ar

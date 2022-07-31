@@ -2,7 +2,7 @@ AR	=ar
 AS	=as
 CC	=gcc
 LD	=ld
-CFLAGS = -std=gnu89 -m32 -ffreestanding -lgcc -Wall -O -fstrength-reduce -fomit-frame-pointer \
+CFLAGS = -std=gnu89 -m32 -ffreestanding -Wall -O -fstrength-reduce -fomit-frame-pointer \
 	-nostdinc -I../include
 CPP	=gcc -E -nostdinc -I../include
 
