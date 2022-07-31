@@ -2,7 +2,7 @@ AR	=gar
 AS	=gas
 CC	=gcc
 LD	=gld
-CFLAGS	=-Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer \
+CFLAGS = -std=gnu89 -m32 -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer \
 	-mstring-insns -nostdinc -I../include
 CPP	=gcc -E -nostdinc -I../include
 
@@ -13,7 +13,7 @@ CPP	=gcc -E -nostdinc -I../include
 	$(CC) $(CFLAGS) \
 	-c -o $*.o $<
 .s.o:
-	$(AS) -o $*.o $<
+	$(AS) --32 -o $*.o $<
 
 OBJS=	open.o read_write.o inode.o file_table.o buffer.o super.o \
 	block_dev.o char_dev.o file_dev.o stat.o exec.o pipe.o namei.o \

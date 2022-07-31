@@ -268,7 +268,9 @@ __asm__("cld\n\t"
 	"scasb\n\t"
 	"notl %0\n\t"
 	"decl %0"
-	:"=c" (__res):"D" (s),"a" (0),"0" (0xffffffff):"di");
+	:"=c" (__res)
+    :"D" (s),"a" (0),"0" (0xffffffff)
+    :);
 return __res;
 }
 
