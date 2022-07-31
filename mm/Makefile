@@ -1,9 +1,9 @@
 CC	=gcc
-CFLAGS = -std=cnu89 -m32 -O -Wall -fstrength-reduce -fcombine-regs -fomit-frame-pointer \
+CFLAGS = -std=gnu89 -m32 -fno-builtin -O -Wall -fstrength-reduce -fomit-frame-pointer \
 	-finline-functions -nostdinc -I../include
-AS	=gas
-AR	=gar
-LD	=gld
+AS	=as
+AR	=ar
+LD	=ld
 CPP	=gcc -E -nostdinc -I../include
 
 .c.o:
@@ -20,7 +20,7 @@ OBJS	= memory.o page.o
 all: mm.o
 
 mm.o: $(OBJS)
-	$(LD) -r -o mm.o $(OBJS)
+	$(LD) -m i386pe -r -o mm.o $(OBJS)
 
 clean:
 	rm -f core *.o *.a tmp_make

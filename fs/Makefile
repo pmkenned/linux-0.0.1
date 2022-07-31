@@ -1,9 +1,9 @@
-AR	=gar
-AS	=gas
+AR	=ar
+AS	=as
 CC	=gcc
-LD	=gld
-CFLAGS = -std=gnu89 -m32 -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer \
-	-mstring-insns -nostdinc -I../include
+LD	=ld
+CFLAGS = -std=gnu89 -m32 -fno-builtin -Wall -O -fstrength-reduce -fomit-frame-pointer \
+	-nostdinc -I../include
 CPP	=gcc -E -nostdinc -I../include
 
 .c.s:
@@ -20,7 +20,7 @@ OBJS=	open.o read_write.o inode.o file_table.o buffer.o super.o \
 	bitmap.o fcntl.o ioctl.o tty_ioctl.o truncate.o
 
 fs.o: $(OBJS)
-	$(LD) -r -o fs.o $(OBJS)
+	$(LD) -m i386pe -r -o fs.o $(OBJS)
 
 clean:
 	rm -f core *.o *.a tmp_make

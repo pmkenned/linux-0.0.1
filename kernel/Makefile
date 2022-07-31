@@ -6,7 +6,7 @@
 # unless it's something special (ie not a .c file).
 #
 
-AR	=gar
+AR	=ar
 AS	=as
 LD	=ld
 LDFLAGS	=-s -x
@@ -30,7 +30,7 @@ OBJS  = sched.o system_call.o traps.o asm.o fork.o \
 	mktime.o
 
 kernel.o: $(OBJS)
-	$(LD) -r -o kernel.o $(OBJS)
+	$(LD) -m i386pe -r -o kernel.o $(OBJS)
 	sync
 
 clean:
