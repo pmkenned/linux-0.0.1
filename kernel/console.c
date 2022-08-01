@@ -74,7 +74,7 @@ static void scrup(void)
 			__asm__("cld\n\t"
 				"rep\n\t"
 				"movsl\n\t"
-				"movl _columns,%1\n\t"
+				"movl columns,%1\n\t"
 				"rep\n\t"
 				"stosw"
 				::"a" (0x0720),
@@ -99,7 +99,7 @@ static void scrup(void)
 		__asm__("cld\n\t"
 			"rep\n\t"
 			"movsl\n\t"
-			"movl _columns,%%ecx\n\t"
+			"movl columns,%%ecx\n\t"
 			"rep\n\t"
 			"stosw"
 			::"a" (0x0720),
@@ -116,7 +116,7 @@ static void scrdown(void)
 		"rep\n\t"
 		"movsl\n\t"
 		"addl $2,%%edi\n\t"	/* %edi has been decremented by 4 */
-		"movl _columns,%%ecx\n\t"
+		"movl columns,%%ecx\n\t"
 		"rep\n\t"
 		"stosw"
 		::"a" (0x0720),
@@ -385,7 +385,7 @@ void con_write(struct tty_struct * tty)
 						pos -= columns<<1;
 						lf();
 					}
-					__asm__("movb _attr,%%ah\n\t"
+					__asm__("movb attr,%%ah\n\t"
 						"movw %%ax,%1\n\t"
 						::"a" (c),"m" (*(short *)pos)
 						:);

@@ -30,7 +30,7 @@ OBJS  = sched.o system_call.o traps.o asm.o fork.o \
 	mktime.o
 
 kernel.o: $(OBJS)
-	$(LD) -m i386pe -r -o kernel.o $(OBJS)
+	$(LD) -m elf_i386 -r -o kernel.o $(OBJS)
 	sync
 
 clean:

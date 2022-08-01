@@ -20,7 +20,7 @@ OBJS	= memory.o page.o
 all: mm.o
 
 mm.o: $(OBJS)
-	$(LD) -m i386pe -r -o mm.o $(OBJS)
+	$(LD) -m elf_i386 -r -o mm.o $(OBJS)
 
 clean:
 	rm -f core *.o *.a tmp_make

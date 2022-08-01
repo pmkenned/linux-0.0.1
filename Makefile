@@ -4,13 +4,13 @@
 # remove them from the CFLAGS defines.
 #
 
-AS86	=as -0 -a
-CC86	=cc -0
-LD86	=ld -0
+AS86	=as -a
+CC86	=cc
+LD86	=ld
 
 AS	=as
 LD	=ld
-LDFLAGS	=-s -x -M -m i386pe
+LDFLAGS	=-s -x -M -m elf_i386
 CC	=gcc
 CFLAGS = -std=gnu89 -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer
 CPP	=gcc -E -nostdinc -Iinclude
@@ -19,13 +19,11 @@ ARCHIVES=kernel/kernel.o mm/mm.o fs/fs.o
 LIBS	=lib/lib.a
 
 .c.s:
-	$(CC) $(CFLAGS) \
-	-ffreestanding -nostdinc -Iinclude -S -o $*.s $<
+	$(CC) $(CFLAGS) -ffreestanding -nostdinc -Iinclude -S -o $*.s $<
 .s.o:
 	$(AS) --32 -o $*.o $<
 .c.o:
-	$(CC) $(CFLAGS) \
-	-ffreestanding -nostdinc -Iinclude -c -o $*.o $<
+	$(CC) $(CFLAGS) -ffreestanding -nostdinc -Iinclude -c -o $*.o $<
 
 all:	Image
 
@@ -34,18 +32,13 @@ Image: boot/boot tools/system tools/build
 	sync
 
 tools/build: tools/build.c
-	$(CC) $(CFLAGS) \
-	-o tools/build tools/build.c
+	$(CC) $(CFLAGS) -o tools/build tools/build.c
 	chmem +65000 tools/build
 
 boot/head.o: boot/head.s
 
-tools/system:	boot/head.o init/main.o \
-		$(ARCHIVES) $(LIBS)
-	$(LD) $(LDFLAGS) boot/head.o init/main.o \
-	$(ARCHIVES) \
-	$(LIBS) \
-	-o tools/system > System.map
+tools/system:	boot/head.o init/main.o $(ARCHIVES) $(LIBS)
+	$(LD) $(LDFLAGS) boot/head.o init/main.o $(ARCHIVES) $(LIBS) -o tools/system > System.map
 
 kernel/kernel.o:
 	(cd kernel; make)
@@ -60,12 +53,11 @@ lib/lib.a:
 	(cd lib; make)
 
 boot/boot:	boot/boot.s tools/system
-	(echo -n "SYSSIZE = (";ls -l tools/system | grep system \
-		| cut -c25-31 | tr '\012' ' '; echo "+ 15 ) / 16") > tmp.s
+	(echo -n "SYSSIZE = ( "; stat -c '%s' tools/system | tr '\n' ' '; echo "+ 15 ) / 16") > tmp.s
 	cat boot/boot.s >> tmp.s
-	$(AS86) -o boot/boot.o tmp.s
+	$(AS86) --32 -o boot/boot.o tmp.s
 	rm -f tmp.s
-	$(LD86) -s -o boot/boot boot/boot.o
+	$(LD86) -m elf_i386 -s -o boot/boot boot/boot.o
 
 clean:
 	rm -f Image System.map tmp_make boot/boot core

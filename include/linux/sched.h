@@ -167,12 +167,12 @@ __asm__("str %%ax\n\t" \
  */
 #define switch_to(n) {\
 struct {long a,b;} __tmp; \
-__asm__("cmpl %%ecx,_current\n\t" \
+__asm__("cmpl %%ecx,current\n\t" \
 	"je 1f\n\t" \
 	"movw %%dx,%1\n\t" \
-	"xchgl %%ecx,_current\n\t" \
+	"xchgl %%ecx,current\n\t" \
 	"ljmp *%0\n\t" \
-	"cmpl %%ecx,_last_task_used_math\n\t" \
+	"cmpl %%ecx,last_task_used_math\n\t" \
 	"jne 1f\n\t" \
 	"clts\n" \
 	"1:" \
@@ -181,9 +181,9 @@ __asm__("cmpl %%ecx,_current\n\t" \
 }
 /*#define switch_to(n) {\
 struct {long a,b;} __tmp; \
-__asm__("cmpl %%ecx,_current\n\t" \
+__asm__("cmpl %%ecx,current\n\t" \
 	"je 1f\n\t" \
-	"xchgl %%ecx,_current\n\t" \
+	"xchgl %%ecx,current\n\t" \
 	"movw %%dx,%1\n\t" \
 	"ljmp %0\n\t" \
 	"cmpl %%ecx,%2\n\t" \

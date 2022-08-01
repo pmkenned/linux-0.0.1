@@ -20,7 +20,7 @@ OBJS=	open.o read_write.o inode.o file_table.o buffer.o super.o \
 	bitmap.o fcntl.o ioctl.o tty_ioctl.o truncate.o
 
 fs.o: $(OBJS)
-	$(LD) -m i386pe -r -o fs.o $(OBJS)
+	$(LD) -m elf_i386 -r -o fs.o $(OBJS)
 
 clean:
 	rm -f core *.o *.a tmp_make
