@@ -4,7 +4,7 @@
 # remove them from the CFLAGS defines.
 #
 
-AS86	=as -a
+NASM	=nasm
 CC86	=cc
 LD86	=ld
 
@@ -33,7 +33,7 @@ Image: boot/boot tools/system tools/build
 
 tools/build: tools/build.c
 	$(CC) $(CFLAGS) -o tools/build tools/build.c
-	chmem +65000 tools/build
+	#chmem +65000 tools/build
 
 boot/head.o: boot/head.s
 
@@ -53,11 +53,10 @@ lib/lib.a:
 	(cd lib; make)
 
 boot/boot:	boot/boot.s tools/system
-	(echo -n "SYSSIZE = ( "; stat -c '%s' tools/system | tr '\n' ' '; echo "+ 15 ) / 16") > tmp.s
+	(echo -n "SYSSIZE equ ( "; stat -c '%s' tools/system | tr '\n' ' '; echo "+ 15 ) / 16") > tmp.s
 	cat boot/boot.s >> tmp.s
-	$(AS86) --32 -o boot/boot.o tmp.s
+	$(NASM) -f bin -o boot/boot tmp.s
 	rm -f tmp.s
-	$(LD86) -m elf_i386 -s -o boot/boot boot/boot.o
 
 clean:
 	rm -f Image System.map tmp_make boot/boot core

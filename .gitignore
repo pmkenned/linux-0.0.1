@@ -12,4 +12,7 @@
 *.a
 
 System.map
+Image
 tools/system
+tools/build
+boot/boot
