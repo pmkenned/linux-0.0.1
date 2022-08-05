@@ -21,7 +21,7 @@ void usage(void)
 int main(int argc, char ** argv)
 {
 	int i,c,id;
-	char buf[1024];
+	char buf[4096];
 
 	if (argc != 3)
 		usage();
@@ -57,10 +57,16 @@ int main(int argc, char ** argv)
 	
 	if ((id=open(argv[2],O_RDONLY,0))<0)
 		die("Unable to open 'system'");
+#if 0
 	if (read(id,buf,GCC_HEADER) != GCC_HEADER)
 		die("Unable to read header of 'system'");
 	if (((long *) buf)[5] != 0)
 		die("Non-GCC header of 'system'");
+#else
+#define ELF_HEADER 0x1000
+	if (read(id,buf,ELF_HEADER) != ELF_HEADER)
+		die("Unable to read header of 'system'");
+#endif
 	for (i=0 ; (c=read(id,buf,sizeof buf))>0 ; i+=c )
 		if (write(1,buf,c)!=c)
 			die("Write call failed");
